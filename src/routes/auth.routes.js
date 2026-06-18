@@ -7,7 +7,7 @@ const router = Router();
 // 1. RUTA DE LOGIN: Debe ser PÚBLICA (Sin middleware)
 router.post('/login', login);
 
-// 2. RUTA DE REGISTRO: Debe ser PÚBLICA (Sin middleware) <-- AQUÍ ESTABA EL ERROR
+// 2. RUTA DE REGISTRO: Debe ser PÚBLICA (Sin middleware)
 router.post('/register', register); 
 
 // 3. RUTA DE RENOVAR: Esta SÍ debe ser PRIVADA (Lleva middleware)

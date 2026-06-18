@@ -1,29 +1,32 @@
-import express from 'express'
-import cors from 'cors'
-import clientesRouter from './routes/clientes.routes.js'
-import productosRouter from './routes/productos.routes.js'
-import authRouter from './routes/auth.routes.js'
+import express from 'express';
+import cors from 'cors'; // Si lo estás usando
+import path from 'path';
+import { fileURLToPath } from 'url';
+import authRoutes from './routes/auth.routes.js';
+import clientesRoutes from './routes/clientes.routes.js';
+import productoRoutes from './routes/productos.routes.js'; // Tus rutas de productos
 
-const app = express()
+// Calcular rutas en ES Modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-const corsOptions = {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
-}
+const app = express();
 
-app.use(cors(corsOptions))
-app.use(express.json())
+// Middlewares globales de procesamiento
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// rutas de autenticación
-app.use('/api/auth', authRouter)
+// ========================================================
+// HABILITAR ACCESO PÚBLICO A LA CARPETA UPLOADS
+// ========================================================
+// Al estar index.js dentro de 'src', resuelve directo a 'src/uploads'
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
-// rutas protegidas de clientes y productos
-app.use('/api', clientesRouter)
-app.use('/api', productosRouter)
+// Tus rutas de la API
+app.use('/api/auth', authRoutes);
+app.use('/api/clientes', clientesRoutes);
+app.use('/api', productoRoutes);
 
-app.use((req, res) => {
-  res.status(404).json({ message: 'Endpoint not found' })
-})
+export default app;
 
-export default app
